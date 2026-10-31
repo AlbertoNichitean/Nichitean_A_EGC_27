@@ -102,13 +102,35 @@ public class Game : GameWindow
         float dt = (float)args.Time;
         SceneObject sel = _scene[_selected];
 
+        // 1. Multiplicatorul pentru tasta Shift (de 3 ori mai rapid)
+        float speedMultiplier = KeyboardState.IsKeyDown(Keys.LeftShift) ? 3.0f : 1.0f;
+
         const float moveSpeed = 2.0f;   // unități de lume pe secundă
-        if (KeyboardState.IsKeyDown(Keys.Left))  sel.Transform.Position.X -= moveSpeed * dt;
-        if (KeyboardState.IsKeyDown(Keys.Right)) sel.Transform.Position.X += moveSpeed * dt;
-        if (KeyboardState.IsKeyDown(Keys.Down))  sel.Transform.Position.Y -= moveSpeed * dt;
-        if (KeyboardState.IsKeyDown(Keys.Up))    sel.Transform.Position.Y += moveSpeed * dt;
+        if (KeyboardState.IsKeyDown(Keys.Left)) sel.Transform.Position.X -= moveSpeed * dt * speedMultiplier;
+        if (KeyboardState.IsKeyDown(Keys.Right)) sel.Transform.Position.X += moveSpeed * dt * speedMultiplier;
+        if (KeyboardState.IsKeyDown(Keys.Down)) sel.Transform.Position.Y -= moveSpeed * dt * speedMultiplier;
+        if (KeyboardState.IsKeyDown(Keys.Up)) sel.Transform.Position.Y += moveSpeed * dt * speedMultiplier;
 
         // TODO (T2): Q / E rotesc obiectul, Z / X îl scalează
+
+
+        // 2. Rotația (Q și E) - 90 grade / secundă
+        float rotationSpeed = 90.0f * speedMultiplier;
+        if (KeyboardState.IsKeyDown(Keys.Q)) sel.Transform.Rotation += rotationSpeed * dt;
+        if (KeyboardState.IsKeyDown(Keys.E)) sel.Transform.Rotation -= rotationSpeed * dt;
+
+        // 3. Scalarea (Z și X) - factor 1.5 / secundă
+        float scaleRate = MathF.Pow(1.5f, dt * speedMultiplier);
+        if (KeyboardState.IsKeyDown(Keys.Z)) sel.Transform.Scale /= scaleRate; // Micșorare
+        if (KeyboardState.IsKeyDown(Keys.X)) sel.Transform.Scale *= scaleRate; // Mărire
+
+        // 4. Limitarea scalării între 0.1 și 10
+        sel.Transform.Scale.X = Math.Clamp(sel.Transform.Scale.X, 0.1f, 10.0f);
+        sel.Transform.Scale.Y = Math.Clamp(sel.Transform.Scale.Y, 0.1f, 10.0f);
+
+        // T2: Scalarea se face prin înmulțire (și împărțire) pentru ca mărirea și micșorarea 
+        // să fie simetrice și proporționale, iar scara să se apropie de 0 fără să devină 
+        // negativă (ceea ce ar oglindi forma).
 
         if (KeyboardState.IsKeyPressed(Keys.Tab)) _selected = (_selected + 1) % _scene.Count;
         if (KeyboardState.IsKeyPressed(Keys.O))   _camera.IsPerspective = !_camera.IsPerspective;
