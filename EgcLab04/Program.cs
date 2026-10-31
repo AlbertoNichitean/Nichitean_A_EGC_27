@@ -5,3 +5,7 @@ using Egc;
 // creăm fereastra (clasa Game) și pornim bucla principală.
 using var game = new Game(800, 600, "EGC – Laborator 04");
 game.Run();
+
+
+
+// Verificare finala pentru push
