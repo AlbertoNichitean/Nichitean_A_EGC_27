@@ -148,6 +148,13 @@ public class Game : GameWindow
         // TODO (T3): la clic stânga, obiectul selectat se mută în punctul din lume aflat sub cursor
         //            (folosiți ScreenToWorld; Depth nu se schimbă)
 
+        if (MouseState.IsButtonPressed(MouseButton.Left))
+        {
+            Vector2 worldPos = ScreenToWorld(MouseState.Position);
+            sel.Transform.Position = new Vector2(worldPos.X, worldPos.Y);
+            // Adâncimea (Depth) obiectului rămâne neschimbată, modificăm doar X și Y.
+        }
+
         // TODO (T4, facultativ): clic dreapta = pivot; tasta P ținută = rotație în jurul pivotului
 
         // --- Camera: tastatura și rotița (secțiunea 6.2) -----------------------------
@@ -228,7 +235,22 @@ public class Game : GameWindow
     private Vector2 ScreenToWorld(Vector2 mousePixels)
     {
         // TODO (T3): pasul 1 (pixel → NDC), apoi pasul 2 (NDC → lume, cu inversa lui view * projection)
-        return Vector2.Zero;
+        // Pasul 1: Pixel -> NDC (cu inversarea axei y)
+        float x_ndc = (2.0f * mousePixels.X) / ClientSize.X - 1.0f;
+        float y_ndc = 1.0f - (2.0f * mousePixels.Y) / ClientSize.Y;
+
+        // Punctul în coordonate omogene pentru clip space / NDC (z = 0, w = 1)
+        Vector4 mouseNdc = new Vector4(x_ndc, y_ndc, 0.0f, 1.0f);
+
+        // Pasul 2: NDC -> Lume folosind inversa produsului dintre ViewMatrix și ProjectionMatrix
+        Matrix4 viewProjectionInverse = Matrix4.Invert(_camera.ViewMatrix * _camera.ProjectionMatrix);
+        Vector4 mouseWorld = mouseNdc * viewProjectionInverse;
+
+        // T3: Semnul minus (sau 1 - ) din formula pentru y apare deoarece sistemul de 
+        // coordonate al ferestrei (și al mouse-ului) are originea în colțul stânga-sus 
+        // cu axa y în jos, în timp ce în NDC și în spațiul lumii originea este în centrul 
+        // ecranului cu axa y în sus.
+        return new Vector2(mouseWorld.X, mouseWorld.Y);
     }
 
     /// <summary>Tasta R: obiectele revin la transformările inițiale, camera la starea inițială.</summary>
