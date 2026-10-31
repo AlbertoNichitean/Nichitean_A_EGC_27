@@ -1,4 +1,14 @@
-*Răspunsuri pentru întrebările din interiorul problemelor (0-5)*
+*Răspunsuri pentru întrebările din interiorul problemelor*
+
+
+
+*\* Problema 0, punctul b:*
+
+&#x20; *- Versiune OpenGL: 3.3.0 - Build 27.20.100.8280*
+
+&#x20; *- Producător (Vendor): Intel*
+
+&#x20; *- Placă grafică (Renderer): Intel(R) UHD Graphics*
 
 
 
