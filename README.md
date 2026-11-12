@@ -12,8 +12,11 @@ Răspuns: Deoarece buffer-ul de adâncime (depth buffer) nu este șters la fieca
 Întrebare 1: Câte vârfuri și câte triunghiuri are sfera mare (32 de felii / slices, 16 benzi / stacks)?
 
 -Coloane: $slices + 1 = 33$ vârfuri pe rând (inclusiv cusătura).
+
 -Rânduri: $stacks + 1 = 17$ rânduri de vârfuri.
+
 -Total vârfuri: $17 \times 33 = 561$ vârfuri.
+
 -Total triunghiuri: $stacks \times slices \times 2 = 16 \times 32 \times 2 = 1024$ triunghiuri (fiecare din cele $16 \times 32$ celule are câte 2 triunghiuri).
 
 Întrebare 2: Câte dintre triunghiuri nu se văd și de ce?Răspuns: Triunghiurile de la cei doi poli (polul nord și polul sud).
