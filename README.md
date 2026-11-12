@@ -19,7 +19,9 @@ Răspuns: Deoarece buffer-ul de adâncime (depth buffer) nu este șters la fieca
 
 -Total triunghiuri: $stacks \times slices \times 2 = 16 \times 32 \times 2 = 1024$ triunghiuri (fiecare din cele $16 \times 32$ celule are câte 2 triunghiuri).
 
+
 Întrebare 2: Câte dintre triunghiuri nu se văd și de ce?Răspuns: Triunghiurile de la cei doi poli (polul nord și polul sud).
+
 
 La pol, raza paralelei ($r\_p$) este 0, ceea ce face ca toate vârfurile de pe rândul respectiv să cadă în același punct fizic. Astfel, triunghiurile adiacente polului au arie zero (două vârfuri se suprapun), dar sunt păstrate în cod pentru uniformitatea grilei. 
 
